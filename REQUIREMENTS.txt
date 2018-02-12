@@ -1,0 +1,12 @@
+keras==2.0.5
+#tensorflow==1.1.2
+pandas==0.19.1
+#numpy==1.12.1
+h5py==2.7.0
+statistics
+matplotlib
+
+#for osx only
+opencv-python
+pillow==4.0.0
+scipy==0.18.1
