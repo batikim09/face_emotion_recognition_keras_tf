@@ -1,5 +1,7 @@
-# Face classification and detection from the [B-IT-BOTS robotics team](https://mas-group.inf.h-brs.de/?page_id=622).
-Real-time face detection and emotion/gender classification using fer2013/IMDB datasets with a keras CNN model and openCV.
+# Face classification and detection 
+This repository is largely based on the [B-IT-BOTS robotics team](https://mas-group.inf.h-brs.de/?page_id=622), Real-time face detection and emotion/gender classification using fer2013/IMDB datasets with a keras CNN model and openCV.
+
+They report:
 * IMDB gender classification test accuracy: 96%.
 * fer2013 emotion classification test accuracy: 66%.
 
@@ -48,14 +50,9 @@ Real-time demo:
 > python3 train_emotion_classifier.py
 
 ### Run real-time emotion demo:
-> python3 video_emotion_color_demo.py
+> ./run_live_emo_demo.sh
 
-### Run real-time guided back-prop demo:
-> python3 image_gradcam_demo.py
+or
 
-### Make inference on single images:
-> python3 image_emotion_gender_demo.py <image_path>
+> python3 ./src/video_emotion_color_demo.py
 
-e.g.
-
-> python3 image_emotion_gender_demo.py ../images/test_image.jpg
