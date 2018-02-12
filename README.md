@@ -14,6 +14,11 @@ Real-time demo:
 
 ## Instructions
 
+### To install
+
+
+pip install -r requirements.txt
+
 ### To train previous/new models for emotion classification:
 
 
