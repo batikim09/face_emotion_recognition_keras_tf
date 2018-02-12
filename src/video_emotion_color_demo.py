@@ -21,9 +21,10 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     
-    #cv 
-    parser.add_argument("-face_detector", "--detection_model_path", dest= 'detection_model_path', type=str, help="path of DB", default = './trained_models/detection_models/haarcascade_frontalface_default.xml')
-    parser.add_argument("-emotion_model", "--emotion_model_path", dest= 'emotion_model_path', type=str, help="indice of test sets, separated by commas", default = './trained_models/emotion_models/fer2013_mini_XCEPTION.102-0.66.hdf5')
+    #cv
+    parser.add_argument("-fs", "--font_size", dest= 'font_size', type=float, help="font size", default = 0.5) 
+    parser.add_argument("-face_detector", "--detection_model_path", dest= 'detection_model_path', type=str, help="path of face detector", default = './trained_models/detection_models/haarcascade_frontalface_default.xml')
+    parser.add_argument("-emotion_model", "--emotion_model_path", dest= 'emotion_model_path', type=str, help="path of emotion model", default = './trained_models/emotion_models/fer2013_mini_XCEPTION.102-0.66.hdf5')
 
     args = parser.parse_args()
 
@@ -101,7 +102,7 @@ if __name__ == '__main__':
             for i in range(n_classes):
                 prob_dist += emotion_labels.get(i) + ': ' + str('%.2f' %(emotion_prediction[0][i])) + ' '
             
-            cv2.putText(rgb_image, prob_dist, (50,50), font, 0.7,(255,255,255),2,cv2.LINE_AA)
+            cv2.putText(rgb_image, prob_dist, (50,50), font, args.font_size,(255,255,255),2,cv2.LINE_AA)
 
         bgr_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
         cv2.imshow('window_frame', bgr_image)

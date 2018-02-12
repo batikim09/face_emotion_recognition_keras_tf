@@ -42,12 +42,18 @@ pip install -r requirements.txt
 > tar -xfv imdb_crop.tar
 
 * Run the train_emotion_classification.py file
-> python3 train_emotion_classifier.py
+> python train_emotion_classifier.py
 
 ### Run real-time emotion demo:
-> ./run_live_emo_demo.sh
+For linux
 
-or
+> python ./src/video_emotion_color_demo.py
 
-> python3 ./src/video_emotion_color_demo.py
+For osx
 
+> pythonw ./src/video_emotion_color_demo.py
+
+You can control the size of font for prob. distributions by putting a parameter: -fs 
+
+For example,
+> python ./src/video_emotion_color_demo.py -fs 0.65

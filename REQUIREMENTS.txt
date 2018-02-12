@@ -7,6 +7,5 @@ statistics
 matplotlib
 scipy==0.18.1
 
-#for osx only
 opencv-python
 pillow==4.0.0
