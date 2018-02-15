@@ -17,14 +17,16 @@ from utils.preprocessor import preprocess_input
 
 # font
 font = cv2.FONT_HERSHEY_SIMPLEX
+screenres = (1920,1200)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     
-    #cv 
-    parser.add_argument("-face_detector", "--detection_model_path", dest= 'detection_model_path', type=str, help="path of DB", default = './trained_models/detection_models/haarcascade_frontalface_default.xml')
-    parser.add_argument("-emotion_model", "--emotion_model_path", dest= 'emotion_model_path', type=str, help="indice of test sets, separated by commas", default = './trained_models/emotion_models/fer2013_mini_XCEPTION.102-0.66.hdf5')
-    parser.add_argument("-o", "--output-file", dest= 'outfile', type=str, help="output video file", default = 'output.avi')
+    #cv
+    parser.add_argument("-fs", "--font_size", dest= 'font_size', type=float, help="font size", default = 0.5) 
+    parser.add_argument("-face_detector", "--detection_model_path", dest= 'detection_model_path', type=str, help="path of face detector", default = './trained_models/detection_models/haarcascade_frontalface_default.xml')
+    parser.add_argument("-emotion_model", "--emotion_model_path", dest= 'emotion_model_path', type=str, help="path of emotion model", default = './trained_models/emotion_models/fer2013_mini_XCEPTION.102-0.66.hdf5')
+    parser.add_argument("-o", "--output-file", dest= 'outfile', type=str, help="output video file", default = None)
 
     args = parser.parse_args()
 
@@ -56,7 +58,10 @@ if __name__ == '__main__':
     # starting lists for calculating modes
     emotion_window = []
 
-    scalefactor = 2.1
+    xr,yr = screenres
+    scalefactor = min(xr/680.,yr/480.)
+    print (scalefactor)
+    # scalefactor = 2.1
 
     # starting video streaming
     cv2.namedWindow('window_frame')
@@ -64,7 +69,9 @@ if __name__ == '__main__':
     video_capture = cv2.VideoCapture(0)
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter(args.outfile,fourcc, 20.0, (int(640*scalefactor),int(480*scalefactor)))
+    out = None
+    if args.outfile:
+        out = cv2.VideoWriter(args.outfile,fourcc, 20.0, (int(640*scalefactor),int(480*scalefactor)))
     
     while True:
         ret,bgr_image = video_capture.read()
@@ -108,21 +115,30 @@ if __name__ == '__main__':
                 # draw_text(face_coordinates, rgb_image2, emotion_mode,
                 #           color, 0, -45, 1, 1)
                 draw_text(face_coordinates, rgb_image2, emotion_text,
-                          color, 0, -45, 1, 1)
+                          color, 0, -45, args.font_size, 1)
 
                 cv2.rectangle(rgb_image2, (x,y-5),(x+w,y-15), color, 1)
                 cv2.rectangle(rgb_image2, (x,y-5),(x+int(emotion_probability*w),y-15), color, -1)                            
 
+            # prob_dist = ""
+            # for i in range(n_classes):
+            #     prob_dist += emotion_labels.get(i) + ': ' + str('%.2f' %(emotion_prediction[0][i])) + ' '
+            
+            # cv2.putText(rgb_image, prob_dist, (50,50), font, args.font_size,(255,255,255),2,cv2.LINE_AA)
         bgr_image = cv2.cvtColor(rgb_image2, cv2.COLOR_RGB2BGR)
-        out.write(bgr_image)
-        fsimg = np.zeros((1080,1920,3),np.uint8)
+        if out:
+            out.write(bgr_image)
+            
+        fsimg = np.zeros((yr,xr,3),np.uint8)
         h,w,c = bgr_image.shape
-        xoff=288
-        yoff=36
+        xoff=int((xr-w)/2)
+        yoff=int((yr-h)/2)
+        
         fsimg[yoff:yoff+h,xoff:xoff+w,:] = bgr_image[:,:,:]
         cv2.imshow('window_frame', fsimg)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     video_capture.release()
-    out.release()
+    if out:
+        out.release()
