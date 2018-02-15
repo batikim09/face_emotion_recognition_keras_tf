@@ -32,8 +32,14 @@ if __name__ == '__main__':
     emotion_labels = get_labels('fer2013')
     print(emotion_labels)
     n_classes = len(emotion_labels)
+    bar_width = 1000
 
     # {0: 'angry', 1: 'disgust', 2: 'fear', 3: 'happy', 4: 'sad', 5: 'surprise', 6: 'neutral'}
+    # red = np.asarray((255, 0, 0))
+    # green = np.asarray((0, 255, 0))
+    # blue = np.asarray((0, 0, 255))
+    # yellow = np.asarray((255, 255, 0))
+    # cyan = np.asarray((0, 255, 255))
     red = (255, 0, 0)
     green = (0, 255, 0)
     blue =(0, 0, 255)
@@ -99,19 +105,51 @@ if __name__ == '__main__':
             except:
                 continue
 
-            if emotion_probability>.2:
+            # if emotion_text == 'angry':
+            #     color = emotion_probability * np.asarray((255, 0, 0))
+            # elif emotion_text == 'sad':
+            #     color = emotion_probability * np.asarray((0, 0, 255))
+            # elif emotion_text == 'happy':
+            #     color = emotion_probability * np.asarray((255, 255, 0))
+            # elif emotion_text == 'surprise':
+            #     color = emotion_probability * np.asarray((0, 255, 255))
+            # else:
+            #     color = emotion_probability * np.asarray((0, 255, 0))
+            if emotion_probability>0.:
                 color = colours[emotion_label_arg]
+
+                # color = color.astype(int)
+                # color = color.tolist()
                 face_coordinates = (face_coordinates * scalefactor).astype(int)
-                x,y,w,h = face_coordinates
+                # x,y,w,h = face_coordinates
+                x = 50
+                y = 1000
+                w = 500
+                
            
-                draw_bounding_box(face_coordinates, rgb_image2, color)
+                # draw_bounding_box(face_coordinates, rgb_image2, color)
                 # draw_text(face_coordinates, rgb_image2, emotion_mode,
                 #           color, 0, -45, 1, 1)
-                draw_text(face_coordinates, rgb_image2, emotion_text,
+                draw_text((x,y), rgb_image2, emotion_text,
                           color, 0, -45, 1, 1)
 
                 cv2.rectangle(rgb_image2, (x,y-5),(x+w,y-15), color, 1)
-                cv2.rectangle(rgb_image2, (x,y-5),(x+int(emotion_probability*w),y-15), color, -1)                            
+                cv2.rectangle(rgb_image2, (x,y-5),(x+int(emotion_probability*w),y-15), color, -1)
+                
+                break
+
+            # bars = w * emotion_prediction[0]
+            # # print(bars)
+            # o = x
+            # for i in range(len(bars)):
+            #     cv2.rectangle(rgb_image2, (o,y-5),(o+int(bars[i]),y-15), colours[i], -1)
+            #     o += int(bars[i])
+
+            # prob_dist = ""
+            # for i in range(n_classes):
+            #     prob_dist += emotion_labels.get(i) + ': ' + str('%.2f' %(emotion_prediction[0][i])) + ' '
+            
+            # cv2.putText(rgb_image2, prob_dist, (50,50), font, 0.7,(255,255,255),2,cv2.LINE_AA)
 
         bgr_image = cv2.cvtColor(rgb_image2, cv2.COLOR_RGB2BGR)
         out.write(bgr_image)
