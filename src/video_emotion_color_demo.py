@@ -27,6 +27,7 @@ if __name__ == '__main__':
     parser.add_argument("-face_detector", "--detection_model_path", dest= 'detection_model_path', type=str, help="path of face detector", default = './trained_models/detection_models/haarcascade_frontalface_default.xml')
     parser.add_argument("-emotion_model", "--emotion_model_path", dest= 'emotion_model_path', type=str, help="path of emotion model", default = './trained_models/emotion_models/fer2013_mini_XCEPTION.102-0.66.hdf5')
     parser.add_argument("-o", "--output-file", dest= 'outfile', type=str, help="output video file", default = None)
+    parser.add_argument("-c", "--camera", dest= 'cam', type=int, help="Input camera", default = 0)
 
     args = parser.parse_args()
 
@@ -66,7 +67,7 @@ if __name__ == '__main__':
     # starting video streaming
     cv2.namedWindow('window_frame')
     cv2.setWindowProperty('window_frame',cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
-    video_capture = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture(args.cam)
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = None
